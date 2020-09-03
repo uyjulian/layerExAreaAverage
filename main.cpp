@@ -1,5 +1,7 @@
+#if 0
 #include <windows.h>
-#include "ncbind.hpp"
+#endif
+#include "ncbind/ncbind.hpp"
 
 typedef tjs_int	fixdot;
 #define DOTBASE			12
@@ -27,13 +29,13 @@ struct layerExAreaAverage
 		tjs_int	dImageWidth, dImageHeight, dPitch;
 		tjs_uint8 * dBuffer;
 		tTJSVariant	val;
-		objthis->PropGet(0, L"imageWidth", NULL, &val, objthis);
+		objthis->PropGet(0, TJS_W("imageWidth"), NULL, &val, objthis);
 		dImageWidth = (tjs_int)val;
-		objthis->PropGet(0, L"imageHeight", NULL, &val, objthis);
+		objthis->PropGet(0, TJS_W("imageHeight"), NULL, &val, objthis);
 		dImageHeight = (tjs_int)val;
-		objthis->PropGet(0, L"mainImageBufferPitch", NULL, &val, objthis);
+		objthis->PropGet(0, TJS_W("mainImageBufferPitch"), NULL, &val, objthis);
 		dPitch = (tjs_int)val;
-		objthis->PropGet(0, L"mainImageBufferForWrite", NULL, &val, objthis);
+		objthis->PropGet(0, TJS_W("mainImageBufferForWrite"), NULL, &val, objthis);
 		dBuffer = (tjs_uint8*)(tjs_int)val;
 
 		//	転送先の位置、サイズを取得
@@ -47,13 +49,13 @@ struct layerExAreaAverage
 		tjs_int sImageWidth, sImageHeight, sPitch;
 		tjs_uint8 * sBuffer;
 		iTJSDispatch2* srcobj	= param[4]->AsObjectNoAddRef();
-		srcobj->PropGet(0, L"imageWidth", NULL, &val, srcobj);
+		srcobj->PropGet(0, TJS_W("imageWidth"), NULL, &val, srcobj);
 		sImageWidth = (tjs_int)val;
-		srcobj->PropGet(0, L"imageHeight", NULL, &val, srcobj);
+		srcobj->PropGet(0, TJS_W("imageHeight"), NULL, &val, srcobj);
 		sImageHeight = (tjs_int)val;
-		srcobj->PropGet(0, L"mainImageBufferPitch", NULL, &val, srcobj);
+		srcobj->PropGet(0, TJS_W("mainImageBufferPitch"), NULL, &val, srcobj);
 		sPitch = (tjs_int)val;
-		srcobj->PropGet(0, L"mainImageBuffer", NULL, &val, srcobj);
+		srcobj->PropGet(0, TJS_W("mainImageBuffer"), NULL, &val, srcobj);
 		sBuffer = (tjs_uint8*)(tjs_int)val;
 
 		//	転送元の位置、サイズを取得
@@ -66,7 +68,7 @@ struct layerExAreaAverage
 		//	拡大処理は行なえません
 		if(dWidth > sWidth || dHeight > sHeight)
 		{
-			TVPThrowExceptionMessage(L"stretchCopyAA は拡大処理を行なえません。");
+			TVPThrowExceptionMessage(TJS_W("stretchCopyAA は拡大処理を行なえません。"));
 			return TJS_E_FAIL;
 		}
 
@@ -196,10 +198,10 @@ struct layerExAreaAverage
 			val[2] = (tjs_int64)dWidth;
 			val[3] = (tjs_int64)dHeight;
 			static tjs_uint32 update_hint = 0;
-			objthis->FuncCall(0, L"update", &update_hint, NULL, 4, pval, objthis);
+			objthis->FuncCall(0, TJS_W("update"), &update_hint, NULL, 4, pval, objthis);
 		}
 
-		TVPAddLog(TJS_W("stretch copy by area average:RESULT (")+ttstr((int)sWidth)+L","+ttstr((int)sHeight)+L")->("+ttstr((int)dWidth)+L","+ttstr((int)dHeight)+L"), time = "+ttstr((int)(TVPGetTickCount() - tick))+L"(ms)");
+		TVPAddLog(TJS_W("stretch copy by area average:RESULT (")+ttstr((int)sWidth)+TJS_W(",")+ttstr((int)sHeight)+TJS_W(")->(")+ttstr((int)dWidth)+TJS_W(",")+ttstr((int)dHeight)+TJS_W("), time = ")+ttstr((int)(TVPGetTickCount() - tick))+TJS_W("(ms)"));
 
 		return TJS_S_OK;
 	}
